@@ -1,5 +1,5 @@
 "use client";
-import { notFound } from "next/navigation";
+
 import { verifyValentine } from "@/app/actions/verifyValentine";
 import ValentineDisplay from "@/components/ValentineDisplay";
 import { ValentineCard } from "@/types/valentine";
@@ -18,9 +18,6 @@ const ValentinePage = () => {
     };
     fetchValentine();
   }, [token]);
-  if (!valentine) {
-    return notFound();
-  }
 
   return <ValentineDisplay valentine={valentine} />;
 };

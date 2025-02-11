@@ -64,8 +64,12 @@ function getShapeClass(shape: string) {
 export default function ValentineDisplay({
   valentine,
 }: {
-  valentine: ValentineCard;
+  valentine: ValentineCard | null;
 }) {
+  if (!valentine) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-red-50 to-rose-100 p-8 flex items-center justify-center relative overflow-hidden">
       {[...Array(12)].map((_, i) => (
