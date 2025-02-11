@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ValentineCard, ValentineShape } from "../types/valentine";
 import { Plus, Copy } from "lucide-react";
+import { createValentine } from "@/app/actions/createValentine";
 
 const colors = [
   "bg-gradient-to-br from-red-400 to-red-500",
@@ -29,17 +30,9 @@ export default function ValentineCreator() {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/create-valentine", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(card),
-      });
-
-      const data = await response.json();
-      if (data.token) {
-        const url = `${window.location.origin}/valentine/${data.token}`;
+      const result = await createValentine(card);
+      if (result.token) {
+        const url = `${window.location.origin}/valentine/${result.token}`;
         setValentineUrl(url);
         setShowSuccess(true);
       }

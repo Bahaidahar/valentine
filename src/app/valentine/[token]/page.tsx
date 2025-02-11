@@ -1,35 +1,28 @@
-import { ValentineCard } from "@/types/valentine";
+"use client";
 import { notFound } from "next/navigation";
-import ValentineDisplay from "./ValentineDisplay";
+import { verifyValentine } from "@/app/actions/verifyValentine";
+import ValentineDisplay from "@/components/ValentineDisplay";
+import { ValentineCard } from "@/types/valentine";
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-export default async function ValentinePage({
-  params,
-}: {
-  params: { token: string };
-}) {
-  let valentine: ValentineCard;
+const ValentinePage = () => {
+  const [valentine, setValentine] = useState<ValentineCard | null>(null);
+  const params = useParams();
+  const token = params.token as string;
 
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/verify-valentine`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: params.token }),
-      }
-    );
-
-    if (!response.ok) {
-      notFound();
-    }
-
-    valentine = await response.json();
-  } catch (error) {
-    console.error("Error verifying token:", error);
-    notFound();
+  useEffect(() => {
+    const fetchValentine = async () => {
+      const valentine = await verifyValentine(token);
+      setValentine(valentine);
+    };
+    fetchValentine();
+  }, [token]);
+  if (!valentine) {
+    return notFound();
   }
 
   return <ValentineDisplay valentine={valentine} />;
-}
+};
+
+export default ValentinePage;
