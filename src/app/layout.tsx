@@ -22,7 +22,7 @@ export const metadata: Metadata = {
       "Create and share beautiful valentine cards with your loved ones",
     images: [
       {
-        url: "/valentine-og.jpg",
+        url: "/web.png",
         width: 1200,
         height: 630,
         alt: "Valentine Generator Preview",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Valentine Generator - Create Special Moments",
     description:
       "Create and share beautiful valentine cards with your loved ones",
-    images: ["/valentine-og.jpg"],
+    images: ["/web.png"],
   },
 };
 
