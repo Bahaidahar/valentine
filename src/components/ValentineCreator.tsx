@@ -7,19 +7,44 @@ import { Plus, Copy } from "lucide-react";
 import { createValentine } from "@/app/actions/createValentine";
 
 const colors = [
-  "bg-gradient-to-br from-red-400 to-red-500",
-  "bg-gradient-to-br from-pink-400 to-pink-500",
-  "bg-gradient-to-br from-purple-400 to-purple-500",
-  "bg-gradient-to-br from-rose-400 to-rose-500",
-  "bg-gradient-to-br from-fuchsia-400 to-fuchsia-500",
-  "bg-gradient-to-br from-violet-400 to-violet-500",
+  { tailwind: "bg-gradient-to-br from-red-400 to-red-500", value: "#f87171" },
+  { tailwind: "bg-gradient-to-br from-pink-400 to-pink-500", value: "#ec4899" },
+  {
+    tailwind: "bg-gradient-to-br from-purple-400 to-purple-500",
+    value: "#a855f7",
+  },
+  { tailwind: "bg-gradient-to-br from-rose-400 to-rose-500", value: "#fb7185" },
+  {
+    tailwind: "bg-gradient-to-br from-fuchsia-400 to-fuchsia-500",
+    value: "#e879f9",
+  },
+  {
+    tailwind: "bg-gradient-to-br from-violet-400 to-violet-500",
+    value: "#8b5cf6",
+  },
 ];
 
-const shapes = ["rectangle", "circle"];
+const shapes = [
+  {
+    name: "heart",
+
+    value: ValentineShape.HEART,
+  },
+  {
+    name: "circle",
+
+    value: ValentineShape.CIRCLE,
+  },
+  {
+    name: "rectangle",
+
+    value: ValentineShape.RECTANGLE,
+  },
+];
 
 export default function ValentineCreator() {
   const [card, setCard] = useState<Partial<ValentineCard>>({
-    color: "bg-red-400",
+    color: "#f87171",
     shape: ValentineShape.HEART,
     message: "",
   });
@@ -43,7 +68,7 @@ export default function ValentineCreator() {
 
   const handleCreateAnother = () => {
     setCard({
-      color: "bg-red-400",
+      color: "#f87171",
       shape: ValentineShape.HEART,
       message: "",
     });
@@ -86,19 +111,21 @@ export default function ValentineCreator() {
                 <div className="flex flex-wrap gap-4">
                   {colors.map((color, index) => (
                     <motion.button
-                      key={color}
+                      key={color.value}
                       type="button"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${color} ${
-                        card.color === color
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${
+                        color.tailwind
+                      } ${
+                        card.color === color.value
                           ? "ring-4 ring-offset-2 ring-red-500"
                           : ""
                       } shadow-lg transform transition-all hover:shadow-xl`}
-                      onClick={() => setCard({ ...card, color })}
+                      onClick={() => setCard({ ...card, color: color.value })}
                     />
                   ))}
                 </div>
@@ -115,23 +142,21 @@ export default function ValentineCreator() {
                 <div className="flex flex-wrap gap-3 sm:gap-4">
                   {shapes.map((shape, index) => (
                     <motion.button
-                      key={shape}
+                      key={shape.name}
                       type="button"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-sm sm:text-base font-medium ${
-                        card.shape === shape
+                      className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-sm sm:text-base font-medium flex items-center gap-2 ${
+                        card.shape === shape.value
                           ? "bg-red-500 text-white shadow-lg"
                           : "bg-gray-100 hover:bg-gray-200"
                       } transform transition-all`}
-                      onClick={() =>
-                        setCard({ ...card, shape: shape as ValentineShape })
-                      }
+                      onClick={() => setCard({ ...card, shape: shape.value })}
                     >
-                      {shape}
+                      <span>{shape.name}</span>
                     </motion.button>
                   ))}
                 </div>
@@ -164,6 +189,13 @@ export default function ValentineCreator() {
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-pink-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 <span className="relative flex items-center gap-2">
+                  <motion.span
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ repeat: Infinity, duration: 2 }}
+                  >
+                    ❤️
+                  </motion.span>
                   Create Valentine
                 </span>
               </motion.button>

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Heart, Sparkles } from "lucide-react";
 import { ValentineCard } from "@/types/valentine";
+import Link from "next/link";
 
 const FloatingHeart = ({ delay = 0, scale = 1, left = "10%" }) => {
   return (
@@ -52,12 +53,10 @@ const FloatingSparkle = ({ delay = 0, right = "10%" }) => {
 
 function getShapeClass(shape: string) {
   switch (shape) {
-    case "heart":
-      return "relative";
     case "circle":
-      return "rounded-full";
+      return "aspect-square rounded-full w-96";
     default:
-      return "rounded-lg";
+      return "aspect-square rounded-lg w-96";
   }
 }
 
@@ -69,7 +68,7 @@ export default function ValentineDisplay({
   if (!valentine) {
     return <div>Loading...</div>;
   }
-
+  console.log(valentine);
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-red-50 to-rose-100 p-8 flex items-center justify-center relative overflow-hidden">
       {[...Array(12)].map((_, i) => (
@@ -106,32 +105,65 @@ export default function ValentineDisplay({
           whileHover={{ scale: 1.02, rotate: [0, 1, -1, 0] }}
           transition={{ duration: 0.3 }}
           className={`
-            ${valentine.color}
-            ${
-              valentine.shape === "heart" ? "" : "aspect-square"
-            } ${getShapeClass(
-            valentine.shape
-          )} p-8 shadow-2xl backdrop-blur-sm max-w-2xl w-full flex items-center justify-center transform transition-all hover:shadow-3xl relative overflow-hidden group`}
+            ${valentine.shape === "heart" ? "" : "shadow-2xl"}
+            ${getShapeClass(valentine.shape)} 
+             backdrop-blur-sm flex items-center justify-center 
+            transform transition-all hover:shadow-3xl relative overflow-hidden group
+          `}
+          style={
+            valentine.shape === "heart" ? {} : { background: valentine.color }
+          }
         >
           {valentine.shape === "heart" && (
-            <Heart
-              className={` absolute inset-0 w-full h-full p-4 text-current`}
-              color={valentine.color}
-            />
+            <div
+              className={`absolute inset-0 flex items-center justify-center`}
+            >
+              <motion.div
+                initial={{ scale: 0.8 }}
+                animate={{
+                  scale: [0.8, 0.85, 0.8],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="w-full h-full relative"
+              >
+                <svg
+                  viewBox="0 0 100 100"
+                  className={`w-full h-full absolute inset-0 `}
+                  fill={valentine.color}
+                  preserveAspectRatio="xMidYMid meet"
+                >
+                  <path d="M50,30 C25,10 0,25 0,50 C0,75 25,90 50,100 C75,90 100,75 100,50 C100,25 75,10 50,30 Z" />
+                </svg>
+              </motion.div>
+            </div>
           )}
           <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative z-10">
+          <div className="relative z-10 p-8">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="text-white text-center font-medium drop-shadow-lg"
+              className="text-white text-center text-lg sm:text-xl font-medium drop-shadow-lg"
             >
               {valentine.message}
             </motion.p>
           </div>
         </motion.div>
       </motion.div>
+      <Link href="/" className=" absolute bottom-[10%]">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-pink-700 font-medium 
+          hover:bg-white/30 transition-colors shadow-lg hover:shadow-xl"
+        >
+          Create Another
+        </motion.button>
+      </Link>
     </div>
   );
 }
